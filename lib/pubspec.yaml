@@ -1,0 +1,23 @@
+workflows:
+  android-workflow:
+    name: Accounting Game Android Workflow
+    instance_type: mac_mini_m1
+    scripts:
+      - name: Create Flutter Skeleton
+        script: |
+          if [ ! -f "pubspec.yaml" ]; then
+            echo "Creating Flutter project..."
+            cd ..
+            flutter create --project-name=myfirstapp temp_app
+            cp -r temp_app/android myfirstapp/
+            cp -r temp_app/pubspec.yaml myfirstapp/
+            rm -rf temp_app
+          fi
+      - name: Get Flutter packages
+        script: |
+          flutter pub get
+      - name: Build APK
+        script: |
+          flutter build apk --release --no-tree-shake-icons
+    artifacts:
+      - build/app/outputs/flutter-apk/app-release.apk
